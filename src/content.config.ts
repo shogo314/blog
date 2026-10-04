@@ -6,7 +6,10 @@ import { blogSchema } from 'starlight-blog/schema';
 
 export const collections = {
 	docs: defineCollection({
-		loader: docsLoader(),
+		loader: docsLoader({
+			// 既定ではファイル名が小文字にされるため、ISO 8601 の "T" を残すようにそのまま使う
+			generateId: ({ entry }) => entry.replace(/\.mdx?$/, ''),
+		}),
 		schema: docsSchema({
 			extend: (context) =>
 				blogSchema(context).extend({

@@ -24,7 +24,7 @@ export default defineConfig({
 			locales: {
 				root: { label: '日本語', lang: 'ja' },
 			},
-			customCss: ['katex/dist/katex.min.css'],
+			customCss: ['katex/dist/katex.min.css', './src/styles/blog.css'],
 			social: [
 				{ icon: 'open-book', label: 'ホーム', href: 'https://shogo314.github.io/' },
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/shogo314' },

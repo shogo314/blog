@@ -1,0 +1,16 @@
+/* タグページでは本文を出さず、タイトル・日付・タグだけの一覧にする */
+.sl-blog-posts[data-blog-page='tag'] {
+	gap: 1.5rem;
+}
+.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview {
+	gap: 0.25rem;
+}
+.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-link {
+	margin-bottom: 0.25rem;
+}
+.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-title {
+	font-size: var(--sl-text-xl);
+}
+.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-excerpt {
+	display: none;
+}
