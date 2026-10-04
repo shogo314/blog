@@ -24,6 +24,8 @@ export default defineConfig({
 			locales: {
 				root: { label: '日本語', lang: 'ja' },
 			},
+			// 前後の記事へのリンクは starlight-blog が出すので、Starlight 本体のものは出さない
+			pagination: false,
 			components: {
 				PageTitle: './src/components/PageTitle.astro',
 			},
