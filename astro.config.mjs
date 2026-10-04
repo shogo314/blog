@@ -36,13 +36,6 @@ export default defineConfig({
 					title: 'ブログ',
 					prefix: 'posts',
 					navigation: 'none',
-					authors: {
-						shogo314: {
-							name: 'shogo314',
-							url: 'https://shogo314.github.io/',
-							picture: '/blog/favicon.svg',
-						},
-					},
 				}),
 			],
 		}),
