@@ -3,12 +3,19 @@
 //   npm run new -- <問題のURL> → 解法記事(problem などを記入済みにする)
 // ファイル名(= URL)は日本時間の現在時刻を ISO 8601 基本形式にしたもの(例: 20261005T1930)
 import { existsSync, writeFileSync } from 'node:fs';
+import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
+
+// 既定(250ms)では WSL などで接続が間に合わず fetch が失敗することがあるため延ばす
+setDefaultAutoSelectFamilyAttemptTimeout(2000);
 
 const POSTS_DIR = 'src/content/docs/posts';
 const MINUTE = 60 * 1000;
 const JST_OFFSET = 9 * 60 * MINUTE;
 
 const problem = process.argv[2];
+
+// YAML の単一引用符で囲む("#" や ":" を含んでも壊れないように)
+const quote = (s) => `'${s.replaceAll("'", "''")}'`;
 
 // 日本時間の年月日時分を取り出す
 const parts = (time) => {
@@ -45,14 +52,27 @@ if (problem) {
 		const index = atcoder[2].startsWith(`${atcoder[1]}_`) ? atcoder[2].slice(atcoder[1].length + 1) : atcoder[2];
 		title = `${contest} ${index.toUpperCase()} - `;
 	}
-	extra = `problem: ${problem}\n` + (contest ? `contest: ${contest}\n` : '') + `# difficulty: \n`;
+	const eolymp = problem.match(/^https:\/\/(?:www\.)?eolymp\.com\/(?:[a-z]{2}\/)?compete\/([^/]+)\/problems\/([^/?#]+)/);
+	if (eolymp) {
+		// 問題ページはログインが必要だが、<title> からコンテスト名は取れる(例: "Blitz Round #25 — Basecamp")
+		contest = eolymp[1];
+		try {
+			const html = await (await fetch(problem, { signal: AbortSignal.timeout(10000) })).text();
+			const name = html.match(/<title>([^<]*?)\s*—\s*Basecamp<\/title>/)?.[1];
+			if (name) contest = name;
+		} catch {
+			// 取得できなければ URL 中のコンテスト ID を使う
+		}
+		title = `${contest} ${eolymp[2]} - `;
+	}
+	extra = `problem: ${problem}\n` + (contest ? `contest: ${quote(contest)}\n` : '') + `# difficulty: \n`;
 }
 
 const path = `${POSTS_DIR}/${id}.md`;
 writeFileSync(
 	path,
 	`---
-title: '${title}'
+title: ${quote(title)}
 date: ${date}
 draft: true
 tags: []
