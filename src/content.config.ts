@@ -16,7 +16,9 @@ export const collections = {
 					// 解法記事のための項目。problem があれば解法記事として扱う
 					problem: z.url().optional(),
 					contest: z.string().optional(),
-					difficulty: z.number().int().optional(),
+					index: z.string().optional(), // 問題番号(A, F など)
+					name: z.string().optional(), // 問題名
+					difficulty: z.number().int().optional(), // AtCoder のときだけ書く(AtCoder Problems の difficulty)
 				}),
 		}),
 	}),

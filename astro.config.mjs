@@ -24,6 +24,9 @@ export default defineConfig({
 			locales: {
 				root: { label: '日本語', lang: 'ja' },
 			},
+			components: {
+				PageTitle: './src/components/PageTitle.astro',
+			},
 			customCss: ['katex/dist/katex.min.css', './src/styles/blog.css'],
 			social: [
 				{ icon: 'open-book', label: 'ホーム', href: 'https://shogo314.github.io/' },

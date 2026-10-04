@@ -1,0 +1,60 @@
+---
+import { getSiteName } from '../lib/sites';
+
+interface Props {
+	problem: string;
+	contest?: string;
+	index?: string;
+	name?: string;
+	difficulty?: number;
+}
+
+const { problem, contest, index, name, difficulty } = Astro.props;
+
+const site = getSiteName(problem);
+const problemLabel = [index, name].filter(Boolean).join(' - ') || problem;
+---
+
+<dl class="problem-info">
+	<dt>サイト</dt>
+	<dd>{site}</dd>
+	{
+		contest && (
+			<>
+				<dt>コンテスト</dt>
+				<dd>{contest}</dd>
+			</>
+		)
+	}
+	<dt>問題</dt>
+	<dd><a href={problem}>{problemLabel}</a></dd>
+	{
+		// 難易度は AtCoder(AtCoder Problems の difficulty)のときだけ表示する
+		site === 'AtCoder' && (
+			<>
+				<dt>難易度</dt>
+				<dd>{difficulty ?? '-'}</dd>
+			</>
+		)
+	}
+</dl>
+
+<style>
+	.problem-info {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0.25rem 1.5rem;
+		margin-top: 1rem;
+		padding: 0.75rem 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+		background-color: var(--sl-color-gray-6);
+		font-size: var(--sl-text-sm);
+	}
+	dt {
+		color: var(--sl-color-gray-3);
+	}
+	dd {
+		margin: 0;
+	}
+</style>

@@ -1,0 +1,20 @@
+---
+// 解法記事(frontmatter に problem があるもの)では、タイトルの下に問題の情報を表示する
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import ProblemInfo from './ProblemInfo.astro';
+
+const { data } = Astro.locals.starlightRoute.entry;
+---
+
+<Default><slot /></Default>
+{
+	data.problem && (
+		<ProblemInfo
+			problem={data.problem}
+			contest={data.contest}
+			index={data.index}
+			name={data.name}
+			difficulty={data.difficulty}
+		/>
+	)
+}
