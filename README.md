@@ -32,7 +32,7 @@ difficulty: 1850                    # AtCoder のときだけ書く(AtCoder Prob
 
 - `problem` がある記事には、タイトルの下に「サイト・コンテスト・問題・難易度」の枠が自動で表示されます。サイト名は URL から判定します(`src/lib/sites.ts`)。
 - 難易度の行は AtCoder の問題のときだけ表示されます(未記入なら `-`)。
-- `npm run new` は、AtCoder なら問題名まで、EOLYMP ならコンテスト名と問題番号(URL の `1` → `A`)まで自動で記入します。
+- `npm run new` は、AtCoder なら問題名まで、Eolymp ならコンテスト名と問題番号(URL の `1` → `A`)まで自動で記入します。
 
 ### 書き方
 
