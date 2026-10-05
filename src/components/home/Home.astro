@@ -1,0 +1,91 @@
+---
+import PostList from './PostList.astro';
+import { contestUrl, countTags, getPosts, groupByContest, tagUrl } from '../../lib/posts';
+
+const posts = await getPosts();
+const recent = posts.slice(0, 5);
+const contests = groupByContest(posts);
+const tags = countTags(posts);
+const others = posts.filter((post) => !post.data.problem);
+---
+
+<h2>最近の記事</h2>
+<PostList posts={recent} />
+
+<div class="columns">
+	<section>
+		<h2>コンテスト別</h2>
+		<ul class="contests">
+			{
+				contests.map((contest) => (
+					<li>
+						<a href={contestUrl(contest)}>{contest.name}</a>
+						<span class="meta">
+							{contest.site} · {contest.posts.length} 件
+						</span>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+	<section>
+		<h2>タグ</h2>
+		<ul class="tags">
+			{
+				tags.map(([tag, count]) => (
+					<li>
+						<a href={tagUrl(tag)}>
+							{tag}
+							<span class="meta">{count}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</div>
+
+<h2>解法以外の記事</h2>
+<PostList posts={others} />
+
+<style>
+	.columns {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+		gap: 0 2rem;
+	}
+	.columns section {
+		margin-top: 0;
+	}
+	ul {
+		list-style: none;
+		padding: 0;
+	}
+	.contests li {
+		margin: 0;
+		padding: 0.3rem 0;
+	}
+	.meta {
+		margin-inline-start: 0.5rem;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.tags li {
+		margin: 0;
+	}
+	.tags a {
+		display: inline-block;
+		padding: 0.1rem 0.6rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		text-decoration: none;
+	}
+	.tags .meta {
+		margin-inline-start: 0.3rem;
+	}
+</style>

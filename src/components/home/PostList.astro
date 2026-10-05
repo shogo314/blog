@@ -1,0 +1,41 @@
+---
+import { formatDate, postUrl, type Post } from '../../lib/posts';
+
+interface Props {
+	posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="post-list">
+	{
+		posts.map((post) => (
+			<li>
+				<time datetime={post.data.date!.toISOString()}>{formatDate(post.data.date!)}</time>
+				<a href={postUrl(post)}>{post.data.title}</a>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.post-list {
+		list-style: none;
+		padding: 0;
+	}
+	.post-list li {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1rem;
+		margin: 0;
+		padding: 0.4rem 0;
+		border-bottom: 1px solid var(--sl-color-hairline);
+	}
+	time {
+		min-width: 9em;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+		line-height: 1.75;
+	}
+</style>

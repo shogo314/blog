@@ -1,0 +1,21 @@
+---
+// コンテストごとの解法記事の一覧(問題番号順)
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import PostList from '../../components/home/PostList.astro';
+import { getPosts, groupByContest, type Contest } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	const contests = groupByContest(await getPosts());
+	return contests.map((contest) => ({ params: { contest: contest.slug }, props: { contest } }));
+}
+
+const { contest } = Astro.props as { contest: Contest };
+const posts = [...contest.posts].sort((a, b) =>
+	(a.data.index ?? '').localeCompare(b.data.index ?? '', 'en', { numeric: true }),
+);
+---
+
+<StarlightPage frontmatter={{ title: contest.name, description: `${contest.site} ${contest.name} の解法記事` }}>
+	<p>{contest.site} · {contest.posts.length} 件</p>
+	<PostList posts={posts} />
+</StarlightPage>

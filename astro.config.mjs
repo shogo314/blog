@@ -9,10 +9,6 @@ import rehypeKatex from 'rehype-katex';
 export default defineConfig({
 	site: 'https://shogo314.github.io',
 	base: '/blog',
-	// ブログのトップは記事一覧にする
-	redirects: {
-		'/': '/blog/posts/',
-	},
 	markdown: {
 		remarkPlugins: [remarkMath],
 		rehypePlugins: [rehypeKatex],

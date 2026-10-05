@@ -39,6 +39,13 @@ difficulty: 1850                    # AtCoder のときだけ書く(AtCoder Prob
 - 数式は `$...$` / `$$...$$`、注意書きは `:::tip` / `:::note` / `:::caution`、折りたたみは `<details>` で書けます。
 - 記事どうしのリンクは `/blog/posts/20250301T1912/` のように書きます。
 
+## ページ構成
+
+- `/blog/` … メインページ(最近の記事・コンテスト別・タグ・解法以外の記事)。記事の frontmatter から自動で作る(`src/components/home/`、`src/lib/posts.ts`)
+- `/blog/posts/` … すべての記事
+- `/blog/posts/tags/<タグ>/` … タグ別
+- `/blog/contests/<サイト>-<コンテスト>/` … コンテスト別(問題番号順、`src/pages/contests/`)
+
 ## ローカルで確認する
 
 ```sh
