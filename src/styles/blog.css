@@ -14,3 +14,13 @@
 .sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-excerpt {
 	display: none;
 }
+
+/* Uiua のコードブロックには Uiua386 フォントを使う(https://github.com/uiua-lang/uiua 、MIT License) */
+@font-face {
+	font-family: 'Uiua386';
+	src: url('/blog/fonts/Uiua386.ttf') format('truetype');
+	font-display: swap;
+}
+.expressive-code pre[data-language='uiua'] code {
+	font-family: 'Uiua386', var(--ec-codeFontFml);
+}

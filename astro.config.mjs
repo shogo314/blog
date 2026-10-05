@@ -25,6 +25,13 @@ export default defineConfig({
 			components: {
 				PageTitle: './src/components/PageTitle.astro',
 			},
+			expressiveCode: {
+				shiki: {
+					// Uiua は色分けに対応していないので、中身を色分けしない言語として登録する
+					// (コードブロックを uiua と書けるようにし、専用フォントを当てるため)
+					langs: [{ name: 'uiua', scopeName: 'source.uiua', patterns: [] }],
+				},
+			},
 			customCss: ['katex/dist/katex.min.css', './src/styles/blog.css'],
 			social: [
 				{ icon: 'open-book', label: 'ホーム', href: 'https://shogo314.github.io/' },
