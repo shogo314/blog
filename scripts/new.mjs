@@ -41,22 +41,27 @@ while (existsSync(`${POSTS_DIR}/${id}.md`)) {
 }
 const date = `${p.y}-${p.mo}-${p.d}T${p.h}:${p.mi}:00+09:00`;
 
-// ページを取得して <title> の中身を返す(失敗したら undefined)
-const fetchTitle = async (url) => {
+// ページを取得して HTML を返す(失敗したら undefined)
+const fetchHtml = async (url, headers = {}) => {
 	try {
-		const html = await (await fetch(url, { signal: AbortSignal.timeout(10000) })).text();
-		const title = html.match(/<title>([^<]*)<\/title>/)?.[1].trim();
-		// よく出る文字参照だけ戻す
-		return title
-			?.replaceAll('&lt;', '<')
-			.replaceAll('&gt;', '>')
-			.replaceAll('&quot;', '"')
-			.replaceAll('&#39;', "'")
-			.replaceAll('&amp;', '&');
+		return await (await fetch(url, { headers, signal: AbortSignal.timeout(10000) })).text();
 	} catch {
 		return undefined;
 	}
 };
+
+// よく出る文字参照だけ戻す
+const unescape = (s) =>
+	s
+		?.replaceAll('&lt;', '<')
+		.replaceAll('&gt;', '>')
+		.replaceAll('&quot;', '"')
+		.replaceAll('&#39;', "'")
+		.replaceAll('&#x27;', "'")
+		.replaceAll('&amp;', '&');
+
+// ページを取得して <title> の中身を返す(失敗したら undefined)
+const fetchTitle = async (url) => unescape((await fetchHtml(url))?.match(/<title>([^<]*)<\/title>/)?.[1].trim());
 
 let title = '';
 let extra = '';
@@ -83,6 +88,18 @@ if (problem) {
 		contest = (await fetchTitle(problem))?.match(/^(.*?)\s*—\s*Basecamp$/)?.[1] ?? eolymp[1];
 		// URL の番号は 1 始まりで、コンテスト内では A, B, … と表示される
 		index = String.fromCharCode('A'.charCodeAt(0) + Number(eolymp[2]) - 1);
+	}
+	const samcoding = problem.match(/^https:\/\/(?:www\.)?samcoding\.uz\/contests\/(\d+)\/problems\/([^/?#]+)/);
+	if (samcoding) {
+		// コンテストページの <title> は "SamCoding | コンテスト名"
+		contest =
+			(await fetchTitle(`https://samcoding.uz/contests/${samcoding[1]}`))?.match(/^SamCoding \| (.+)$/)?.[1] ??
+			samcoding[1];
+		index = samcoding[2].toUpperCase();
+		// 問題ページの <title> には問題名がないので本文の "A. 問題名" から取る。既定はウズベク語なので英語にする
+		const html = await fetchHtml(problem, { Cookie: 'django_language=en' });
+		const m = html?.match(new RegExp(`>\\s*${index}\\.\\s*([^<]+?)\\s*<`));
+		if (!nameArg && m) name = unescape(m[1]);
 	}
 	title = [contest, index].filter(Boolean).join(' ') + ` - ${name}`;
 	extra =

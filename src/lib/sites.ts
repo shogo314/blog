@@ -4,6 +4,7 @@ const SITES: Record<string, string> = {
 	'codeforces.com': 'Codeforces',
 	'eolymp.com': 'Eolymp',
 	'basecamp.eolymp.com': 'Eolymp',
+	'samcoding.uz': 'SamCoding',
 	'yukicoder.me': 'yukicoder',
 	'judge.yosupo.jp': 'Library Checker',
 	'onlinejudge.u-aizu.ac.jp': 'AOJ',
