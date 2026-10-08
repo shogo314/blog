@@ -20,5 +20,8 @@
     "remark-math": "^6.0.0",
     "sharp": "^0.35.3",
     "starlight-blog": "^0.30.0"
+  },
+  "overrides": {
+    "katex": "$katex"
   }
 }
