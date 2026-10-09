@@ -4,6 +4,7 @@
 // ファイル名(= URL)は日本時間の現在時刻を ISO 8601 基本形式にしたもの(例: 20261005T1930)
 import { existsSync, writeFileSync } from 'node:fs';
 import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
+import { getSiteName } from '../src/lib/sites.ts';
 
 // 既定(250ms)では WSL などで接続が間に合わず fetch が失敗することがあるため延ばす
 setDefaultAutoSelectFamilyAttemptTimeout(2000);
@@ -101,11 +102,12 @@ if (problem) {
 		const m = html?.match(new RegExp(`>\\s*${index}\\.\\s*([^<]+?)\\s*<`));
 		if (!nameArg && m) name = unescape(m[1]);
 	}
-	title = [contest, index].filter(Boolean).join(' ') + ` - ${name}`;
+	// コンテストの問題でなければ、コンテスト名の代わりにサイト名を使う
+	title = ([contest, index].filter(Boolean).join(' ') || getSiteName(problem)) + ` - ${name}`;
 	extra =
 		`problem: ${problem}\n` +
 		(contest ? `contest: ${quote(contest)}\n` : '') +
-		`index: ${quote(index)}\n` +
+		(index ? `index: ${quote(index)}\n` : '') +
 		`name: ${quote(name)}\n` +
 		(isAtCoder ? `# difficulty: \n` : '');
 }

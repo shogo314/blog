@@ -9,6 +9,7 @@ const SITES: Record<string, string> = {
 	'judge.yosupo.jp': 'Library Checker',
 	'onlinejudge.u-aizu.ac.jp': 'AOJ',
 	'ac.nowcoder.com': 'NowCoder',
+	'share-oj.net': 'ShareOJ',
 };
 
 export function getSiteName(problemUrl: string): string {
