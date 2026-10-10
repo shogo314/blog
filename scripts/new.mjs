@@ -102,6 +102,22 @@ if (problem) {
 		const m = html?.match(new RegExp(`>\\s*${index}\\.\\s*([^<]+?)\\s*<`));
 		if (!nameArg && m) name = unescape(m[1]);
 	}
+	const doj = problem.match(/^https:\/\/(?:www\.)?doj\.kr\/(?:[a-z]{2}\/)?problems\/(\d+)/);
+	if (doj) {
+		// 英語版の問題ページの <title> は "#580 問題名"
+		const html = await fetchHtml(`https://doj.kr/en/problems/${doj[1]}`);
+		const m = unescape(html?.match(/<title>([^<]*)<\/title>/)?.[1])?.match(/^#\d+ (.+)$/);
+		if (!nameArg && m) name = m[1].trim();
+		// 問題ページには出典のカテゴリ(例: /en/categories/doj/bcd/bcd9)しかないので、
+		// カテゴリページからコンテストページをたどり、問題の一覧から問題番号(A, B, …)を探す
+		const category = [...(html?.matchAll(/class="problem-source-link" href="([^"]+)"/g) ?? [])].at(-1)?.[1];
+		const contestPath = category && (await fetchHtml(`https://doj.kr${category}`))?.match(/href="(\/[a-z]{2}\/contests\/[^"]+)"/)?.[1];
+		if (contestPath) {
+			const contestHtml = await fetchHtml(`https://doj.kr${contestPath}`);
+			contest = unescape(contestHtml?.match(/<title>([^<]*)<\/title>/)?.[1].trim()) ?? '';
+			index = contestHtml?.match(new RegExp(`<td>([A-Z]+\\d*)</td><td><a[^>]*href="/[a-z]{2}/problems/${doj[1]}\\?`))?.[1] ?? '';
+		}
+	}
 	// コンテストの問題でなければ、コンテスト名の代わりにサイト名を使う
 	title = ([contest, index].filter(Boolean).join(' ') || getSiteName(problem)) + ` - ${name}`;
 	extra =
