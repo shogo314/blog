@@ -15,6 +15,7 @@ export const collections = {
 				blogSchema(context).extend({
 					// 解法記事のための項目。problem があれば解法記事として扱う
 					problem: z.url().optional(),
+					standalone: z.url().optional(), // コンテストの問題がコンテストの外にも置かれているときの問題ページ
 					contest: z.string().optional(),
 					index: z.string().optional(), // 問題番号(A, F など)
 					name: z.string().optional(), // 問題名

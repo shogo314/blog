@@ -11,6 +11,7 @@ const { data } = Astro.locals.starlightRoute.entry;
 	data.problem && (
 		<ProblemInfo
 			problem={data.problem}
+			standalone={data.standalone}
 			contest={data.contest}
 			index={data.index}
 			name={data.name}

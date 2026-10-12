@@ -70,6 +70,7 @@ if (problem) {
 	let contest = '';
 	let index = '';
 	let name = nameArg ?? '';
+	let standalone = '';
 	let isAtCoder = false;
 	const atcoder = problem.match(/^https:\/\/atcoder\.jp\/contests\/([^/]+)\/tasks\/([^/?#]+)/);
 	if (atcoder) {
@@ -118,10 +119,29 @@ if (problem) {
 			index = contestHtml?.match(new RegExp(`<td>([A-Z]+\\d*)</td><td><a[^>]*href="/[a-z]{2}/problems/${doj[1]}\\?`))?.[1] ?? '';
 		}
 	}
+	const shareoj = problem.match(
+		/^https:\/\/(?:www\.)?share-oj\.net\/(?:contests\/([0-9a-f-]+)\/)?problems\/([0-9a-f-]+)/,
+	);
+	if (shareoj) {
+		// 問題ページの <title> は "問題名 | ShareOJ"、コンテストの問題ページなら "問題名 | コンテスト名 | ShareOJ"
+		const m = (await fetchTitle(problem))?.match(/^(.+?) \|(?: (.+) \|)? ShareOJ$/);
+		if (!nameArg && m) name = m[1];
+		if (shareoj[1]) {
+			contest = m?.[2] ?? '';
+			// コンテストページに埋め込まれたデータでは、問題の ID が A, B, … の順に並んでいる
+			const html = await fetchHtml(`https://www.share-oj.net/contests/${shareoj[1]}`);
+			const ids = [...(html?.matchAll(/\{"hasEditorial":\d+,"id":\d+[^}]*\},"([0-9a-f-]{36})"/g) ?? [])].map((x) => x[1]);
+			const i = ids.indexOf(shareoj[2]);
+			if (i >= 0) index = String.fromCharCode('A'.charCodeAt(0) + i);
+			// コンテストの問題はコンテストの外の問題ページにも置かれる
+			standalone = `https://www.share-oj.net/problems/${shareoj[2]}`;
+		}
+	}
 	// コンテストの問題でなければ、コンテスト名の代わりにサイト名を使う
 	title = ([contest, index].filter(Boolean).join(' ') || getSiteName(problem)) + ` - ${name}`;
 	extra =
 		`problem: ${problem}\n` +
+		(standalone ? `standalone: ${standalone}\n` : '') +
 		(contest ? `contest: ${quote(contest)}\n` : '') +
 		(index ? `index: ${quote(index)}\n` : '') +
 		`name: ${quote(name)}\n` +
