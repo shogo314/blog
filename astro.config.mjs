@@ -4,6 +4,7 @@ import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypeUiuaInlineCode from './src/lib/rehype-uiua-inline-code.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
 	base: '/blog',
 	markdown: {
 		remarkPlugins: [remarkMath],
-		rehypePlugins: [rehypeKatex],
+		rehypePlugins: [rehypeKatex, rehypeUiuaInlineCode],
 	},
 	integrations: [
 		starlight({

@@ -15,7 +15,7 @@
 	display: none;
 }
 
-/* Uiua のコードブロックには Uiua386 フォントを使う(https://github.com/uiua-lang/uiua 、MIT License) */
+/* Uiua のコードには Uiua386 フォントを使う(https://github.com/uiua-lang/uiua 、MIT License) */
 @font-face {
 	font-family: 'Uiua386';
 	src: url('/blog/fonts/Uiua386.ttf') format('truetype');
@@ -23,4 +23,8 @@
 }
 .expressive-code pre[data-language='uiua'] code {
 	font-family: 'Uiua386', var(--ec-codeFontFml);
+}
+/* 本文中のインラインコード(uiua クラスは src/lib/rehype-uiua-inline-code.mjs で付ける) */
+.sl-markdown-content code.uiua {
+	font-family: 'Uiua386', var(--__sl-font-mono);
 }
