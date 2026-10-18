@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # 記事の最終更新日時を git の履歴から求めるため
       - uses: withastro/action@v6
 
   deploy:

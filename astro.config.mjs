@@ -25,6 +25,7 @@ export default defineConfig({
 			pagination: false,
 			components: {
 				PageTitle: './src/components/PageTitle.astro',
+				LastUpdated: './src/components/LastUpdated.astro',
 			},
 			expressiveCode: {
 				shiki: {

@@ -3,13 +3,29 @@ import { z } from 'astro/zod';
 import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { blogSchema } from 'starlight-blog/schema';
+import { getLastUpdated } from './lib/last-updated';
+
+const loader = docsLoader({
+	// 既定ではファイル名が小文字にされるため、ISO 8601 の "T" を残すようにそのまま使う
+	generateId: ({ entry }) => entry.replace(/\.mdx?$/, ''),
+});
 
 export const collections = {
 	docs: defineCollection({
-		loader: docsLoader({
-			// 既定ではファイル名が小文字にされるため、ISO 8601 の "T" を残すようにそのまま使う
-			generateId: ({ entry }) => entry.replace(/\.mdx?$/, ''),
-		}),
+		loader: {
+			...loader,
+			// frontmatter に lastUpdated がなければ git の履歴から入れる(starlight-blog が投稿日の横に出す)
+			load: (context) =>
+				loader.load({
+					...context,
+					parseData: ({ data, filePath, ...rest }) =>
+						context.parseData({
+							...rest,
+							filePath,
+							data: { lastUpdated: filePath && getLastUpdated(filePath), ...data },
+						}),
+				}),
+		},
 		schema: docsSchema({
 			extend: (context) =>
 				blogSchema(context).extend({
