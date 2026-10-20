@@ -11,6 +11,7 @@ const SITES: Record<string, string> = {
 	'ac.nowcoder.com': 'NowCoder',
 	'share-oj.net': 'ShareOJ',
 	'doj.kr': 'DOJ',
+	'mofecoder.com': 'MOFE',
 };
 
 export function getSiteName(problemUrl: string): string {
