@@ -102,6 +102,8 @@ if (problem) {
 		const html = await fetchHtml(problem, { Cookie: 'django_language=en' });
 		const m = html?.match(new RegExp(`>\\s*${index}\\.\\s*([^<]+?)\\s*<`));
 		if (!nameArg && m) name = unescape(m[1]);
+		// コンテストの問題はコンテストの外の問題ページにも置かれる
+		standalone = `https://samcoding.uz/problems/${samcoding[1]}/${samcoding[2]}`;
 	}
 	const doj = problem.match(/^https:\/\/(?:www\.)?doj\.kr\/(?:[a-z]{2}\/)?problems\/(\d+)/);
 	if (doj) {
