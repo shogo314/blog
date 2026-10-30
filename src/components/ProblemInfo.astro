@@ -1,19 +1,25 @@
 ---
+import { contestUrlOf } from '../lib/posts';
 import { getSiteName } from '../lib/sites';
 
 interface Props {
-	problem: string;
+	problem?: string;
 	standalone?: string;
 	contest?: string;
+	contestUrl?: string;
 	index?: string;
 	name?: string;
 	difficulty?: number;
 }
 
-const { problem, standalone, contest, index, name, difficulty } = Astro.props;
+const { problem, standalone, contest, contestUrl, index, name, difficulty } = Astro.props;
 
-const site = getSiteName(problem);
+// problem か contestUrl のどちらかは必ずある
+const siteUrl = (problem ?? contestUrl)!;
+const site = getSiteName(siteUrl);
 const problemLabel = [index, name].filter(Boolean).join(' - ') || problem;
+// AHC(ヒューリスティックコンテスト)の問題には AtCoder Problems の difficulty がない
+const isHeuristic = problem !== undefined && /atcoder\.jp\/contests\/ahc\d+\//.test(problem);
 ---
 
 <dl class="problem-info">
@@ -23,18 +29,27 @@ const problemLabel = [index, name].filter(Boolean).join(' - ') || problem;
 		contest && (
 			<>
 				<dt>コンテスト</dt>
-				<dd>{contest}</dd>
+				<dd>
+					<a href={contestUrlOf(siteUrl, contest)}>{contest}</a>
+					{contestUrl && <>(<a href={contestUrl}>{site} のページ</a>)</>}
+				</dd>
 			</>
 		)
 	}
-	<dt>問題</dt>
-	<dd>
-		<a href={problem}>{problemLabel}</a>
-		{standalone && <>(<a href={standalone}>常設版</a>)</>}
-	</dd>
 	{
-		// 難易度は AtCoder(AtCoder Problems の difficulty)のときだけ表示する
-		site === 'AtCoder' && (
+		problem && (
+			<>
+				<dt>問題</dt>
+				<dd>
+					<a href={problem}>{problemLabel}</a>
+					{standalone && <>(<a href={standalone}>常設版</a>)</>}
+				</dd>
+			</>
+		)
+	}
+	{
+		// 難易度は AtCoder(AtCoder Problems の difficulty)の問題のときだけ表示する。AHC は除く
+		problem && site === 'AtCoder' && !isHeuristic && (
 			<>
 				<dt>難易度</dt>
 				<dd>{difficulty ?? '-'}</dd>

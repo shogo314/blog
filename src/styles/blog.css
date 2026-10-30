@@ -1,17 +1,24 @@
-/* タグページでは本文を出さず、タイトル・日付・タグだけの一覧にする */
-.sl-blog-posts[data-blog-page='tag'] {
-	gap: 1.5rem;
+/* 記事一覧・タグページでは本文を出さず、タイトル・日付・タグだけの一覧にする */
+.sl-blog-posts[data-blog-page] {
+	gap: 0;
 }
-.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview {
+.sl-blog-posts[data-blog-page] .sl-blog-preview {
 	gap: 0.25rem;
+	margin: 0;
+	padding-block: 0.75rem;
+	border-bottom: 1px solid var(--sl-color-hairline);
 }
-.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-link {
-	margin-bottom: 0.25rem;
+.sl-blog-posts[data-blog-page] .sl-blog-preview > * {
+	margin: 0;
 }
-.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-title {
-	font-size: var(--sl-text-xl);
+.sl-blog-posts[data-blog-page] .sl-blog-preview-link {
+	margin-bottom: 0;
 }
-.sl-blog-posts[data-blog-page='tag'] .sl-blog-preview-excerpt {
+.sl-blog-posts[data-blog-page] .sl-blog-preview-title {
+	margin: 0;
+	font-size: var(--sl-text-lg);
+}
+.sl-blog-posts[data-blog-page] .sl-blog-preview-excerpt {
 	display: none;
 }
 
@@ -27,4 +34,11 @@
 /* 本文中のインラインコード(uiua クラスは src/lib/rehype-uiua-inline-code.mjs で付ける) */
 .sl-markdown-content code.uiua {
 	font-family: 'Uiua386', var(--__sl-font-mono);
+}
+
+/* メインページの見出し部分は、既定だと上下の余白が大きすぎるので詰める */
+@media (min-width: 50rem) {
+	.hero {
+		padding-block: 2.5rem 1.5rem;
+	}
 }

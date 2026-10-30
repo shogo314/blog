@@ -1,5 +1,5 @@
 ---
-// 解法記事(frontmatter に problem があるもの)では、タイトルの下に問題の情報を表示する
+// 解法記事(frontmatter に problem があるもの)や、contestUrl を書いた参加記では、タイトルの下に問題・コンテストの情報を表示する
 import Default from '@astrojs/starlight/components/PageTitle.astro';
 import ProblemInfo from './ProblemInfo.astro';
 
@@ -8,9 +8,10 @@ const { data } = Astro.locals.starlightRoute.entry;
 
 <Default><slot /></Default>
 {
-	data.problem && (
+	(data.problem || data.contestUrl) && (
 		<ProblemInfo
 			problem={data.problem}
+			contestUrl={data.contestUrl}
 			standalone={data.standalone}
 			contest={data.contest}
 			index={data.index}

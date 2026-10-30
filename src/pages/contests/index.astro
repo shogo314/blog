@@ -1,0 +1,43 @@
+---
+// すべてのコンテストを、サイトごと(記事の多いサイトから順)にまとめて並べる。サイトの中では名前の降順(だいたい新しい回から)
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import ContestList from '../../components/home/ContestList.astro';
+import { getPosts, groupByContest, navSidebar, type Contest } from '../../lib/posts';
+
+const posts = await getPosts();
+const contests = groupByContest(posts);
+
+const bySite = new Map<string, Contest[]>();
+for (const contest of contests) {
+	if (!bySite.has(contest.site)) bySite.set(contest.site, []);
+	bySite.get(contest.site)!.push(contest);
+}
+for (const cs of bySite.values()) cs.sort((a, b) => b.name.localeCompare(a.name, 'en', { numeric: true }));
+const countPosts = (cs: Contest[]) => cs.reduce((sum, c) => sum + c.posts.length, 0);
+const sites = [...bySite].sort((a, b) => countPosts(b[1]) - countPosts(a[1]) || a[0].localeCompare(b[0]));
+const headings = sites.map(([site]) => ({ depth: 2, slug: site, text: site }));
+---
+
+<StarlightPage
+	frontmatter={{ title: 'コンテスト別', description: '記事を書いたコンテストの一覧' }}
+	sidebar={navSidebar(posts)}
+	{headings}
+>
+	<p>全 {contests.length} コンテスト</p>
+	{
+		sites.map(([site, cs]) => (
+			<section>
+				<h2 id={site}>
+					{site}({countPosts(cs)} 件)
+				</h2>
+				<ContestList contests={cs} hideSite />
+			</section>
+		))
+	}
+</StarlightPage>
+
+<style>
+	section h2 {
+		font-size: var(--sl-text-h4);
+	}
+</style>

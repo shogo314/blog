@@ -46,6 +46,8 @@ export default defineConfig({
 					title: 'ブログ',
 					prefix: 'posts',
 					navigation: 'none',
+					// 一覧は本文を出さないので、1 ページに多めに並べる
+					postCount: 30,
 				}),
 			],
 		}),

@@ -1,0 +1,36 @@
+---
+// すべてのタグを種類ごとに、記事数の多い順に並べる
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import TagCloud from '../components/home/TagCloud.astro';
+import { countTags, getPosts, navSidebar } from '../lib/posts';
+import { groupTagsByKind } from '../lib/tags';
+
+const posts = await getPosts();
+const tags = countTags(posts);
+const groups = await groupTagsByKind(tags);
+const headings = groups.map((g) => ({ depth: 2, slug: g.kind, text: g.label }));
+---
+
+<StarlightPage
+	frontmatter={{ title: 'タグ', description: '記事に付けたタグの一覧' }}
+	sidebar={navSidebar(posts)}
+	{headings}
+>
+	<p>全 {tags.length} 個</p>
+	{
+		groups.map((g) => (
+			<section>
+				<h2 id={g.kind}>
+					{g.label}({g.tags.length} 個)
+				</h2>
+				<TagCloud tags={g.tags} />
+			</section>
+		))
+	}
+</StarlightPage>
+
+<style>
+	section h2 {
+		font-size: var(--sl-text-h4);
+	}
+</style>

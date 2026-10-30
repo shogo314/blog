@@ -1,5 +1,6 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
+import { file } from 'astro/loaders';
 import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { blogSchema } from 'starlight-blog/schema';
@@ -33,6 +34,8 @@ export const collections = {
 					problem: z.url().optional(),
 					standalone: z.url().optional(), // コンテストの問題がコンテストの外にも置かれているときの問題ページ
 					contest: z.string().optional(),
+					// コンテストのページ。参加記など problem がない記事でコンテストを示すときに書く(サイト名はここから決める)
+					contestUrl: z.url().optional(),
 					index: z.string().optional(), // 問題番号(A, F など)
 					name: z.string().optional(), // 問題名
 					difficulty: z.number().int().optional(), // AtCoder のときだけ書く(AtCoder Problems の difficulty)
@@ -40,4 +43,11 @@ export const collections = {
 		}),
 	}),
 	i18n: defineCollection({ loader: i18nLoader(), schema: i18nSchema() }),
+	// タグのメタ情報(キーがタグの名前)。種類の意味は src/data/tags.yaml の先頭に書いてある
+	tags: defineCollection({
+		loader: file('src/data/tags.yaml'),
+		schema: z.object({
+			kind: z.enum(['article', 'algorithm', 'problem']),
+		}),
+	}),
 };

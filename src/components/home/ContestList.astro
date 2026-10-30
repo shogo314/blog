@@ -1,0 +1,42 @@
+---
+// コンテストへのリンクを記事数付きで並べる(メインページとコンテスト一覧で使う)
+import { contestUrl, type Contest } from '../../lib/posts';
+
+interface Props {
+	contests: Contest[];
+	/** サイト名を出さない(サイトごとにまとめた一覧で使う) */
+	hideSite?: boolean;
+}
+
+const { contests, hideSite } = Astro.props;
+---
+
+<ul class="contests">
+	{
+		contests.map((contest) => (
+			<li>
+				<a href={contestUrl(contest)}>{contest.name}</a>
+				<span class="meta">
+					{!hideSite && `${contest.site} · `}
+					{contest.posts.length} 件
+				</span>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.contests {
+		list-style: none;
+		padding: 0;
+	}
+	.contests li {
+		margin: 0;
+		padding: 0.3rem 0;
+	}
+	.meta {
+		margin-inline-start: 0.5rem;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+	}
+</style>

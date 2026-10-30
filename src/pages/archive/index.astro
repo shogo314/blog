@@ -1,0 +1,16 @@
+---
+// 年ごとに、記事のある月と件数を並べる
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import MonthLinks from '../../components/home/MonthLinks.astro';
+import { getPosts, navSidebar } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<StarlightPage
+	frontmatter={{ title: '月別アーカイブ', description: '記事を書いた月ごとの一覧', tableOfContents: false }}
+	sidebar={navSidebar(posts)}
+>
+	<p>全 {posts.length} 件</p>
+	<MonthLinks posts={posts} />
+</StarlightPage>

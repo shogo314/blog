@@ -1,12 +1,27 @@
 ---
+import ContestList from './ContestList.astro';
 import PostList from './PostList.astro';
-import { contestUrl, countTags, getPosts, groupByContest, tagUrl } from '../../lib/posts';
+import TagCloud from './TagCloud.astro';
+import { countTags, getPosts, groupByContest, tagUrl } from '../../lib/posts';
+import { groupTagsByKind } from '../../lib/tags';
 
+// メインページには一部だけ出し、残りはコンテスト一覧・タグ一覧のページで見られるようにする
+const CONTEST_COUNT = 8;
+const TAG_COUNT = 8; // 種類ごと
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const posts = await getPosts();
-const recent = posts.slice(0, 5);
+const recent = posts.slice(0, 10);
 const contests = groupByContest(posts);
 const tags = countTags(posts);
-const others = posts.filter((post) => !post.data.problem);
+const tagGroups = await groupTagsByKind(tags);
+// リンク集はタグページで見られるので、ここには出さない
+const LINKS_TAG = 'リンク集';
+// AHC の参加記には problem があるが、解法記事ではないのでこちらに入れる
+const others = posts.filter(
+	(post) => (!post.data.problem || post.data.tags?.includes('参加記')) && !post.data.tags?.includes(LINKS_TAG),
+);
+const linkCount = tags.find(([tag]) => tag === LINKS_TAG)?.[1] ?? 0;
 ---
 
 <h2>最近の記事</h2>
@@ -15,38 +30,26 @@ const others = posts.filter((post) => !post.data.problem);
 <div class="columns">
 	<section>
 		<h2>コンテスト別</h2>
-		<ul class="contests">
-			{
-				contests.map((contest) => (
-					<li>
-						<a href={contestUrl(contest)}>{contest.name}</a>
-						<span class="meta">
-							{contest.site} · {contest.posts.length} 件
-						</span>
-					</li>
-				))
-			}
-		</ul>
+		<ContestList contests={contests.slice(0, CONTEST_COUNT)} />
+		<a class="more" href={`${BASE}/contests/`}>すべてのコンテスト({contests.length})→</a>
 	</section>
 	<section>
 		<h2>タグ</h2>
-		<ul class="tags">
-			{
-				tags.map(([tag, count]) => (
-					<li>
-						<a href={tagUrl(tag)}>
-							{tag}
-							<span class="meta">{count}</span>
-						</a>
-					</li>
-				))
-			}
-		</ul>
+		{
+			tagGroups.map((g) => (
+				<>
+					<h3>{g.label}</h3>
+					<TagCloud tags={g.tags.slice(0, TAG_COUNT)} />
+				</>
+			))
+		}
+		<a class="more" href={`${BASE}/tags/`}>すべてのタグ({tags.length})→</a>
 	</section>
 </div>
 
 <h2>解法以外の記事</h2>
 <PostList posts={others} />
+<a class="more" href={tagUrl(LINKS_TAG)}>リンク集({linkCount})→</a>
 
 <style>
 	.columns {
@@ -57,35 +60,14 @@ const others = posts.filter((post) => !post.data.problem);
 	.columns section {
 		margin-top: 0;
 	}
-	ul {
-		list-style: none;
-		padding: 0;
-	}
-	.contests li {
-		margin: 0;
-		padding: 0.3rem 0;
-	}
-	.meta {
-		margin-inline-start: 0.5rem;
-		color: var(--sl-color-gray-3);
+	.columns h3 {
+		margin-top: 1rem;
+		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-sm);
 	}
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-	.tags li {
-		margin: 0;
-	}
-	.tags a {
+	.more {
 		display: inline-block;
-		padding: 0.1rem 0.6rem;
-		border: 1px solid var(--sl-color-gray-5);
-		border-radius: 999px;
-		text-decoration: none;
-	}
-	.tags .meta {
-		margin-inline-start: 0.3rem;
+		margin-top: 0.75rem;
+		font-size: var(--sl-text-sm);
 	}
 </style>

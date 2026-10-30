@@ -1,0 +1,69 @@
+---
+// 年ごとに、記事のある月へのリンクを件数付きで並べる(メインページと月別アーカイブで使う)
+import { archiveUrl, groupByMonth, groupByYear, type Post } from '../../lib/posts';
+
+interface Props {
+	posts: Post[];
+}
+
+const years = groupByYear(groupByMonth(Astro.props.posts));
+---
+
+<dl class="month-links">
+	{
+		years.map(({ year, months }) => (
+			<>
+				<dt>{year}年</dt>
+				<dd>
+					<ul>
+						{months.map((m) => (
+							<li>
+								<a href={archiveUrl(m.year, m.month)}>
+									{m.month}月<span class="count">{m.posts.length}</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</dd>
+			</>
+		))
+	}
+</dl>
+
+<style>
+	.month-links {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0.5rem 1rem;
+		align-items: baseline;
+	}
+	dt {
+		font-weight: 600;
+	}
+	dd,
+	ul {
+		margin: 0;
+	}
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		list-style: none;
+		padding: 0;
+	}
+	li {
+		margin: 0;
+	}
+	a {
+		display: inline-block;
+		padding: 0.1rem 0.6rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		text-decoration: none;
+	}
+	.count {
+		margin-inline-start: 0.3rem;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+	}
+</style>

@@ -1,18 +1,20 @@
 ---
-import { formatDate, postUrl, type Post } from '../../lib/posts';
+import { formatDate, formatTime, postUrl, type Post } from '../../lib/posts';
 
 interface Props {
 	posts: Post[];
+	/** 日付の代わりに時刻を出す(日ごとにまとめた一覧で使う) */
+	time?: boolean;
 }
 
-const { posts } = Astro.props;
+const { posts, time } = Astro.props;
 ---
 
-<ul class="post-list">
+<ul class:list={['post-list', { time }]}>
 	{
 		posts.map((post) => (
 			<li>
-				<time datetime={post.data.date!.toISOString()}>{formatDate(post.data.date!)}</time>
+				<time datetime={post.data.date!.toISOString()}>{time ? formatTime(post.data.date!) : formatDate(post.data.date!)}</time>
 				<a href={postUrl(post)}>{post.data.title}</a>
 			</li>
 		))
@@ -37,5 +39,8 @@ const { posts } = Astro.props;
 		color: var(--sl-color-gray-3);
 		font-size: var(--sl-text-sm);
 		line-height: 1.75;
+	}
+	.time time {
+		min-width: 3em;
 	}
 </style>

@@ -1,0 +1,84 @@
+# タグのメタ情報。記事の frontmatter の tags に書いた名前をキーにする
+#
+# kind: タグの種類
+#   article   … 記事の分類(リンク集、参加記など)
+#   algorithm … 解法で使うアルゴリズム・データ構造・考え方
+#   problem   … 問題の分野や特徴(何を扱う問題か、どんな形式か)
+#
+# ここにないタグは「未分類」として表示され、ビルド時に警告が出る
+
+# 記事の分類
+リンク集: { kind: article }
+参加記: { kind: article }
+受験記: { kind: article }
+雑記: { kind: article }
+AHC: { kind: article }
+ICPC: { kind: article }
+NAIST: { kind: article }
+
+# アルゴリズム・データ構造・考え方
+セグメント木: { kind: algorithm }
+Segment Tree Beats: { kind: algorithm }
+BIT: { kind: algorithm }
+Cartesian Tree: { kind: algorithm }
+Union-Find: { kind: algorithm }
+Trie: { kind: algorithm }
+Suffix Automaton: { kind: algorithm }
+スタック: { kind: algorithm }
+累積和: { kind: algorithm }
+いもす法: { kind: algorithm }
+二分探索: { kind: algorithm }
+尺取り法: { kind: algorithm }
+スライディングウィンドウ: { kind: algorithm }
+スライド最小値: { kind: algorithm }
+ソート: { kind: algorithm }
+偏角ソート: { kind: algorithm }
+座標圧縮: { kind: algorithm }
+全探索: { kind: algorithm }
+bit全探索: { kind: algorithm }
+貪欲法: { kind: algorithm }
+DP: { kind: algorithm }
+bit DP: { kind: algorithm }
+シミュレーション: { kind: algorithm }
+ダイクストラ法: { kind: algorithm }
+強連結成分分解: { kind: algorithm }
+素因数分解: { kind: algorithm }
+ビット演算: { kind: algorithm }
+ハッシュ: { kind: algorithm }
+ローリングハッシュ: { kind: algorithm }
+切り捨て除算: { kind: algorithm }
+切り上げ除算: { kind: algorithm }
+逆順処理: { kind: algorithm }
+区間のマージ: { kind: algorithm }
+主客転倒: { kind: algorithm }
+中間値の定理: { kind: algorithm }
+嘘解法: { kind: algorithm }
+
+# 問題の分野・特徴
+数え上げ: { kind: problem }
+組合せ: { kind: problem }
+構築: { kind: problem }
+文字列: { kind: problem }
+回文: { kind: problem }
+グラフ: { kind: problem }
+木: { kind: problem }
+二部グラフ: { kind: problem }
+グリッド: { kind: problem }
+幾何: { kind: problem }
+円: { kind: problem }
+数学: { kind: problem }
+剰余: { kind: problem }
+GCD: { kind: problem }
+桁和: { kind: problem }
+偶奇: { kind: problem }
+集合: { kind: problem }
+順列: { kind: problem }
+転倒数: { kind: problem }
+LIS: { kind: problem }
+MEX: { kind: problem }
+辞書順: { kind: problem }
+最大部分配列問題: { kind: problem }
+フラクタル: { kind: problem }
+インタラクティブ: { kind: problem }
+入出力: { kind: problem }
+ソースコード制約: { kind: problem }

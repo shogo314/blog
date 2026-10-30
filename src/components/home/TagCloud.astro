@@ -1,0 +1,48 @@
+---
+// タグを記事数付きで並べる(メインページとタグ一覧で使う)
+import { tagUrl } from '../../lib/posts';
+
+interface Props {
+	tags: [string, number][];
+}
+
+const { tags } = Astro.props;
+---
+
+<ul class="tags">
+	{
+		tags.map(([tag, count]) => (
+			<li>
+				<a href={tagUrl(tag)}>
+					{tag}
+					<span class="count">{count}</span>
+				</a>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		list-style: none;
+		padding: 0;
+	}
+	.tags li {
+		margin: 0;
+	}
+	.tags a {
+		display: inline-block;
+		padding: 0.1rem 0.6rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		text-decoration: none;
+	}
+	.count {
+		margin-inline-start: 0.3rem;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+	}
+</style>
