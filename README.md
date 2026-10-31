@@ -35,6 +35,12 @@ difficulty: 1850                    # AtCoder のときだけ書く(AtCoder Prob
 - コンテストの問題がコンテストの外にも置かれているときは、その問題ページを `standalone` に書くと、枠の問題の行に「(常設版)」のリンクが付きます。
 - `npm run new` は、AtCoder なら問題名まで、Eolymp ならコンテスト名と問題番号(URL の `1` → `A`)まで、ShareOJ なら問題名(コンテストの問題ページの URL ならコンテスト名と問題番号も)まで自動で記入します。
 
+### 講座
+
+リンク集や、特定の問題を扱わない解説の記事には、`tags` に `講座` を付けます(例: `tags: [講座, セグメント木]`)。
+
+講座の一覧ページ `/blog/lectures/` は、`src/data/lectures.yaml` に書いた分野と順番で並びます。講座を書いたら、そのファイルの分野に記事 ID(ファイル名から `.md` を除いたもの)を足してください。足し忘れると一覧の「未分類」に入り、ビルド時に警告が出ます。
+
 ### 書き方
 
 - 数式は `$...$` / `$$...$$`、注意書きは `:::tip` / `:::note` / `:::caution`、折りたたみは `<details>` で書けます。
@@ -46,6 +52,7 @@ difficulty: 1850                    # AtCoder のときだけ書く(AtCoder Prob
 - `/blog/posts/` … すべての記事
 - `/blog/posts/tags/<タグ>/` … タグ別
 - `/blog/contests/<サイト>-<コンテスト>/` … コンテスト別(問題番号順、`src/pages/contests/`)
+- `/blog/lectures/` … 講座を分野ごとに並べたもの(`src/data/lectures.yaml`、`src/lib/lectures.ts`)
 
 ## ローカルで確認する
 

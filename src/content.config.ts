@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { file } from 'astro/loaders';
+import yaml from 'js-yaml';
 import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { blogSchema } from 'starlight-blog/schema';
@@ -48,6 +49,17 @@ export const collections = {
 		loader: file('src/data/tags.yaml'),
 		schema: z.object({
 			kind: z.enum(['article', 'algorithm', 'problem']),
+		}),
+	}),
+	// 講座の分野と並び順(id が分野の名前)。書き方は src/data/lectures.yaml の先頭に書いてある
+	// getCollection は id の順に並べ替えるので、ファイルでの順番を order に入れておく
+	lectures: defineCollection({
+		loader: file('src/data/lectures.yaml', {
+			parser: (text) => (yaml.load(text) as object[]).map((entry, order) => ({ ...entry, order })),
+		}),
+		schema: z.object({
+			order: z.number().int(),
+			posts: z.array(z.string()),
 		}),
 	}),
 };

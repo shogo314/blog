@@ -15,6 +15,7 @@
     "@astrojs/starlight": "^0.42.5",
     "astro": "^7.2.10",
     "github-slugger": "^2.0.0",
+    "js-yaml": "^4.3.2",
     "katex": "^0.19.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",

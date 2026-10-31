@@ -1,0 +1,43 @@
+---
+// 講座(リンク集や、特定の問題を扱わない解説)を分野ごとに並べる。分野と順番は src/data/lectures.yaml
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getPosts, navSidebar, postUrl } from '../lib/posts';
+import { getLectureCategories } from '../lib/lectures';
+
+const posts = await getPosts();
+const categories = await getLectureCategories(posts);
+const total = categories.reduce((sum, c) => sum + c.posts.length, 0);
+const headings = categories.map((c) => ({ depth: 2, slug: c.name, text: c.name }));
+---
+
+<StarlightPage
+	frontmatter={{ title: '講座', description: 'アルゴリズムやデータ構造などのリンク集と解説を、分野ごとにまとめたもの' }}
+	sidebar={navSidebar(posts)}
+	{headings}
+>
+	<p>
+		アルゴリズムやデータ構造などについて、参考になる記事を集めたリンク集と、自分で書いた解説です。全 {total} 本。
+	</p>
+	{
+		categories.map((c) => (
+			<section>
+				<h2 id={c.name}>
+					{c.name}({c.posts.length} 本)
+				</h2>
+				<ul>
+					{c.posts.map((post) => (
+						<li>
+							<a href={postUrl(post)}>{post.data.title}</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		))
+	}
+</StarlightPage>
+
+<style>
+	section h2 {
+		font-size: var(--sl-text-h4);
+	}
+</style>

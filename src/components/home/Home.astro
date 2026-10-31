@@ -2,7 +2,8 @@
 import ContestList from './ContestList.astro';
 import PostList from './PostList.astro';
 import TagCloud from './TagCloud.astro';
-import { countTags, getPosts, groupByContest, tagUrl } from '../../lib/posts';
+import { countTags, getPosts, groupByContest } from '../../lib/posts';
+import { countLectures, LECTURE_TAG } from '../../lib/lectures';
 import { groupTagsByKind } from '../../lib/tags';
 
 // メインページには一部だけ出し、残りはコンテスト一覧・タグ一覧のページで見られるようにする
@@ -15,13 +16,12 @@ const recent = posts.slice(0, 10);
 const contests = groupByContest(posts);
 const tags = countTags(posts);
 const tagGroups = await groupTagsByKind(tags);
-// 講座(リンク集や、特定の問題を扱わない解説)はタグページで見られるので、ここには出さない
-const LINKS_TAG = '講座';
+// 講座(リンク集や、特定の問題を扱わない解説)は講座のページで見られるので、ここには出さない
 // AHC の参加記には problem があるが、解法記事ではないのでこちらに入れる
 const others = posts.filter(
-	(post) => (!post.data.problem || post.data.tags?.includes('参加記')) && !post.data.tags?.includes(LINKS_TAG),
+	(post) => (!post.data.problem || post.data.tags?.includes('参加記')) && !post.data.tags?.includes(LECTURE_TAG),
 );
-const linkCount = tags.find(([tag]) => tag === LINKS_TAG)?.[1] ?? 0;
+const lectureCount = countLectures(posts);
 ---
 
 <h2>最近の記事</h2>
@@ -49,7 +49,7 @@ const linkCount = tags.find(([tag]) => tag === LINKS_TAG)?.[1] ?? 0;
 
 <h2>解法以外の記事</h2>
 <PostList posts={others} />
-<a class="more" href={tagUrl(LINKS_TAG)}>講座({linkCount})→</a>
+<a class="more" href={`${BASE}/lectures/`}>講座({lectureCount})→</a>
 
 <style>
 	.columns {

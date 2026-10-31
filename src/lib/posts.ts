@@ -116,6 +116,7 @@ export function navSidebar(posts: Post[]) {
 		{ label: 'ホーム', link: '/' },
 		{ label: 'すべての記事', link: '/posts/' },
 		{ label: 'コンテスト別', link: '/contests/' },
+		{ label: '講座', link: '/lectures/' },
 		{ label: 'タグ', link: '/tags/' },
 		{
 			label: '月別アーカイブ',
