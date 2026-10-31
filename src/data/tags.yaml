@@ -66,6 +66,7 @@ bit DP: { kind: algorithm }
 グリッド: { kind: problem }
 幾何: { kind: problem }
 円: { kind: problem }
+重心: { kind: problem }
 数学: { kind: problem }
 剰余: { kind: problem }
 GCD: { kind: problem }
