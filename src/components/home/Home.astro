@@ -15,8 +15,8 @@ const recent = posts.slice(0, 10);
 const contests = groupByContest(posts);
 const tags = countTags(posts);
 const tagGroups = await groupTagsByKind(tags);
-// リンク集はタグページで見られるので、ここには出さない
-const LINKS_TAG = 'リンク集';
+// 講座(リンク集や、特定の問題を扱わない解説)はタグページで見られるので、ここには出さない
+const LINKS_TAG = '講座';
 // AHC の参加記には problem があるが、解法記事ではないのでこちらに入れる
 const others = posts.filter(
 	(post) => (!post.data.problem || post.data.tags?.includes('参加記')) && !post.data.tags?.includes(LINKS_TAG),
@@ -49,7 +49,7 @@ const linkCount = tags.find(([tag]) => tag === LINKS_TAG)?.[1] ?? 0;
 
 <h2>解法以外の記事</h2>
 <PostList posts={others} />
-<a class="more" href={tagUrl(LINKS_TAG)}>リンク集({linkCount})→</a>
+<a class="more" href={tagUrl(LINKS_TAG)}>講座({linkCount})→</a>
 
 <style>
 	.columns {

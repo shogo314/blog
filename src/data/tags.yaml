@@ -1,14 +1,14 @@
 # タグのメタ情報。記事の frontmatter の tags に書いた名前をキーにする
 #
 # kind: タグの種類
-#   article   … 記事の分類(リンク集、参加記など)
+#   article   … 記事の分類(講座、参加記など)
 #   algorithm … 解法で使うアルゴリズム・データ構造・考え方
 #   problem   … 問題の分野や特徴(何を扱う問題か、どんな形式か)
 #
 # ここにないタグは「未分類」として表示され、ビルド時に警告が出る
 
 # 記事の分類
-リンク集: { kind: article }
+講座: { kind: article }
 参加記: { kind: article }
 受験記: { kind: article }
 雑記: { kind: article }
